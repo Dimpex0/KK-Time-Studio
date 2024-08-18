@@ -1,22 +1,17 @@
+import { useAccountStore } from "../../store/account";
 import { getCsrfToken } from "../../utils/auth";
 
 export default function LogoutPage() {
-  async function handleLogout() {
-    const response = await fetch(
-      `${process.env.REACT_APP_DOMAIN}/account/logout/`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "X-CSRFToken": getCsrfToken(),
-        },
-      }
-    );
-    if (response.ok) {
-      // TODO
-    } else {
-      // TODO
-    }
+  const resetAccount = useAccountStore((state) => state.reset);
+  function handleLogout() {
+    fetch(`${process.env.REACT_APP_DOMAIN}/account/logout/`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "X-CSRFToken": getCsrfToken(),
+      },
+    });
+    resetAccount();
   }
   return <button onClick={handleLogout}>Logout</button>;
 }

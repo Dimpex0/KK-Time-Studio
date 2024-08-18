@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 
+import { useAccountStore } from "../store/account";
+
 export default function MainNavigation() {
+  const isAdmin = useAccountStore((state) => state.isAdmin);
   return (
     <header>
       <nav>
+        {isAdmin && "HI, I'm an admin"}
+        <p>{isAdmin}</p>
         <ul>
           <li>
             <Link to="/">Home</Link>

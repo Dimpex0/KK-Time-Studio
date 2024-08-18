@@ -3,6 +3,8 @@ import { useState } from "react";
 import { getCsrfToken } from "../../utils/auth";
 
 export default function RegisterPage() {
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password1: "",
@@ -31,15 +33,19 @@ export default function RegisterPage() {
       }
     );
 
+    const responseData = await response.json();
     if (response.ok) {
-      console.log("ok");
+      setError("");
+      setMessage(responseData.message);
     } else {
-      console.log("no");
+      setError(responseData.message);
     }
   }
 
   return (
     <form onSubmit={handleFormSubmit}>
+      {message && <p>{message}</p>}
+      {error && <p>{error}</p>}
       <input
         placeholder="Email"
         name="email"

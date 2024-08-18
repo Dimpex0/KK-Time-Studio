@@ -1,9 +1,13 @@
 import { useState } from "react";
 
 import { getCsrfToken } from "../../utils/auth";
+import { useAccountStore } from "../../store/account";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const updateIsLoggedIn = useAccountStore((state) => state.updateIsLoggedIn);
+  const updateIsAdmin = useAccountStore((state) => state.updateIsAdmin);
 
   function handleInputChange(e) {
     setFormData({
@@ -26,15 +30,23 @@ export default function LoginPage() {
         },
       }
     );
+    const responseData = await response.json();
+    // returns {message, isAdmin} and a status code
     if (!response.ok) {
-      // TODO
+      setError(responseData.message);
     } else {
-      // TODO
+      updateIsLoggedIn(true);
+      if (responseData.isAdmin) {
+        updateIsAdmin(true);
+      } else {
+        updateIsAdmin(false);
+      }
     }
   }
   return (
     <>
       <h1>Login</h1>
+      {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           placeholder="Email"
