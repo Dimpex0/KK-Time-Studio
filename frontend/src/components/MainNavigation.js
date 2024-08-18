@@ -14,6 +14,9 @@ export default function MainNavigation() {
           <li>
             <Link to="/account/logout">Logout</Link>
           </li>
+          <li>
+            <Link to="/account/register">Register</Link>
+          </li>
         </ul>
       </nav>
     </header>

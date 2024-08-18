@@ -26,6 +26,11 @@ class CustomUser(AbstractUser):
         null=False,
         blank=False
     )
+    is_active = models.BooleanField(
+        default=False,
+        null=False,
+        blank=False
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
