@@ -7,9 +7,10 @@ UserModel = get_user_model()
 
 @admin.register(UserModel)
 class ClientAdmin(UserAdmin):
-    list_display = ['email', 'is_staff', 'is_superuser']
+    list_display = ['id', 'email', 'is_staff', 'is_superuser']
     readonly_fields = ['date_joined', 'password']
-    ordering = ['email']
+    ordering = ['-id']
+    search_fields = ['email', 'id']
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

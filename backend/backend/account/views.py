@@ -30,8 +30,7 @@ class LoginViewAPI(APIView):
             if not user.is_active:
                 return Response({'message': 'Account not activate. Please check your e-mail.'}, status=428)
             
-            is_admin = user.is_superuser
-            login(request, user)
+            is_admin = login_and_return_user(request, user)
             # TODO return user profile
             return Response({'message': 'Login successful.', 'isAdmin': is_admin}, status=202)
         else:
@@ -66,6 +65,14 @@ class RegisterViewAPI(APIView):
             return Response({'message': "Couldn't send an activation e-mail. Please try again later."}, status=400)
         
         return Response({'message': "Registration successful. We've sent an activation link to your e-mail."}, status=201)
+    
+class CheckSessionViewAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    
+    def post(self, request):
+        is_admin = login_and_return_user(request, request.user)
+        return Response({'message': 'Session recreated.', 'isAdmin': is_admin}, status=201)
     
 class ActivateViewAPI(APIView):
     permission_classes = [AllowAny]
@@ -104,6 +111,12 @@ def send_activation_email(user):
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[email]
     )
+    
+def login_and_return_user(request, user):
+    login(request, user)
+    is_admin = user.is_superuser
+    # TODO return profile
+    return is_admin
     
 
 # END --------------------- REGISTRAION ------------- LOGIN ------------- LOGOUT --------------------- END

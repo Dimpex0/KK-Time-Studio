@@ -10,8 +10,9 @@ export default function LogoutPage() {
       headers: {
         "X-CSRFToken": getCsrfToken(),
       },
-    });
-    resetAccount();
+    })
+      .then(() => resetAccount())
+      .catch(() => resetAccount());
   }
   return <button onClick={handleLogout}>Logout</button>;
 }
